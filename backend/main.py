@@ -1,10 +1,13 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-import firebase_admin
-from firebase_admin import credentials, firestore
+from typing import Dict, List, Optional
+from services.ai_service import AIService
+from services.database_service import DatabaseService
+from typing import Dict, List
 
 app = FastAPI()
+db = DatabaseService()
 
 # Configure CORS
 app.add_middleware(
@@ -15,11 +18,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Initialize Firebase
-cred = credentials.Certificate("path/to/your/firebase-credentials.json")
-firebase_admin.initialize_app(cred)
-db = firestore.client()
-
 class ProductSearch(BaseModel):
     query: str
     price_range: Optional[Dict[str, float]] = None
@@ -28,26 +26,14 @@ class ProductSearch(BaseModel):
 @app.post("/api/search")
 async def search_products(search: ProductSearch):
     try:
-        # Initialize AI service
         ai_service = AIService()
-
-        # Analyze search query using AI
         query_analysis = await ai_service.analyze_product_query(search.query)
-
-        # Get product recommendations
+        
         mock_products = [
             {"name": "Test Product 1", "price": 99.99, "rating": 4.5},
             {"name": "Test Product 2", "price": 149.99, "rating": 4.2}
         ]
         recommendations = await ai_service.generate_product_recommendation(mock_products)
-
-        # Store AI analysis in Firebase
-        db.collection('ai_analysis').add({
-            'query': search.query,
-            'analysis': query_analysis,
-            'recommendations': recommendations,
-            'timestamp': firestore.SERVER_TIMESTAMP
-        })
 
         return {
             "query_analysis": query_analysis,
@@ -60,7 +46,12 @@ async def search_products(search: ProductSearch):
 @app.get("/api/tracked-products")
 async def get_tracked_products():
     try:
-        # TODO: Implement getting tracked products from Firebase
-        return {"products": []}
+        products = await db.get_tracked_products()
+        return {"products": products}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# Add a test endpoint to verify the server is running
+@app.get("/")
+async def root():
+    return {"message": "Price Tracker AI API is running"}
