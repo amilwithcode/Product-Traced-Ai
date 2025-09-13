@@ -1,4 +1,5 @@
 from .product_scraper import ProductScraperService
+from typing import Dict, List
 
 class AIService:
     def __init__(self):
@@ -8,7 +9,7 @@ class AIService:
         self.location = "us-central1"
         self.product_scraper = ProductScraperService()
 
-    async def analyze_product_query(self, query: str) -> Dict:
+    async def analyze_product_query(self, query: str) -> dict:
         try:
             response = await openai.ChatCompletion.create(
                 model="gemini-2.5-pro",
@@ -30,7 +31,7 @@ class AIService:
             print(f"Product analysis error: {str(e)}")
             return {"analyzed_query": query, "confidence": False}
 
-    async def generate_product_recommendation(self, products: List[Dict]) -> Dict:
+    async def generate_product_recommendation(self, products: list[dict]) -> Dict:
         try:
             # Format products for AI analysis
             products_text = "\n".join([
