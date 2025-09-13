@@ -5,7 +5,7 @@ export default function Home() {
   const [searchQuery, setSearchQuery] = useState('');
   const [loading, setLoading] = useState(false);
 
-  return (`
+  return (
     <main className="min-h-screen bg-gray-900 text-white">
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-8">Price Tracker AI</h1>
@@ -37,6 +37,6 @@ export default function Home() {
           </div>
         </div>
       </div>
-    </main>`
+    </main>
   );
 }
