@@ -1,4 +1,4 @@
-from .product_scraper import ProductScraperService
+from services.product_scraper import ProductScraper
 from typing import Dict, List
 
 class AIService:
