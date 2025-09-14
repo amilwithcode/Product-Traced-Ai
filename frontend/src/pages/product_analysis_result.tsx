@@ -28,7 +28,7 @@ interface ProductAnalysisProps {
 
 export default function ProductAnalysis({ initialData }: ProductAnalysisProps) {
   const [analysisResult, setAnalysisResult] = useState<AnalysisResult | null>(null);
-  const [error, setError] = useState<string | null>(null);
+   const [_error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAnalysis = async () => {

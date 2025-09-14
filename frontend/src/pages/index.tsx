@@ -4,7 +4,7 @@ import React from 'react';
 import TrackedProducts from './productList'
 import ProductAnalysis from './product_analysis_result'
 
-interface AIAnalysis {
+export interface AIAnalysis {
   price_prediction: {
     trend: string;
     forecast: number;
@@ -172,6 +172,14 @@ export default function Home(): React.DetailedHTMLProps<React.HTMLAttributes<HTM
               <p className="text-gray-400 text-xs font-medium leading-normal tracking-[0.015em]">Profile</p>
             </a>
           </div>
+          {productData && (
+            <div className="mt-4 px-4">
+              <h3 className="text-sm font-semibold text-white">Tracked product</h3>
+              <p className="text-sm text-gray-400">
+                {productData.name} — ${productData.price}
+              </p>
+            </div>
+          )}
           {/* <div className="h-5 bg-gray-900/50 backdrop-blur-sm"></div> */}
         </div>
         <div className="mt-8">
